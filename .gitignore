@@ -1,3 +1,21 @@
+sonstiges/
+resources/
+psoc4_cykit/*/codegentemp/
+psoc4_cykit/*/CortexM0/
+psoc4_cykit/*/Export/
+psoc4_cykit/*/Generated_Source/
+ohmmeter/ohmmeter/bin/
+ohmmeter/ohmmeter/obj/
+ohmmeter/ohmmeter/Properties/
+
+# psoc files
+*.cyfit
+*.cyprj.lion
+*.cywrk.lion
+# vs net files
+*.csproj.user
+
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
