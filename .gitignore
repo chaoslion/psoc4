@@ -4,15 +4,18 @@ psoc4_cykit/*/codegentemp/
 psoc4_cykit/*/CortexM0/
 psoc4_cykit/*/Export/
 psoc4_cykit/*/Generated_Source/
+
+# ohmmeter .net project
+ohmmeter/.vs/
 ohmmeter/ohmmeter/bin/
 ohmmeter/ohmmeter/obj/
 ohmmeter/ohmmeter/Properties/
 
-# psoc files
+# general psoc files
 *.cyfit
 *.cyprj.lion
 *.cywrk.lion
-# vs net files
+# general vs .net files
 *.csproj.user
 
 
