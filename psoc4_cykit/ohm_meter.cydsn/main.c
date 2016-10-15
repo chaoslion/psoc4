@@ -27,23 +27,24 @@ CY_ISR(tim_handler) {
         
     if( vdrop >= V_MAX ) {    
         result = RES_OL;        
-        idac_val--;
+        if( idac_val > 1 ) {
+            idac_val--;
+        }
     } else if( vdrop <= V_MIN ) {
         result = RES_CL;                    
     } else {          
         result = RES_VL;
-        accumulator += vdrop / idac_val;
+        accumulator += (float)vdrop / idac_val;
         samples++;
     }      
     
-    
+    update_counter++;    
     if( !update_counter ) {   
         done = 1;
         idac_val = 0xFF;
     }
     
     idac_SetValue(idac_val);    
-    update_counter++;    
 }
 
 int main() {             
@@ -72,20 +73,22 @@ int main() {
                 case RES_CL:                    
                     rgb_red_Write(0x0);
                     if( result == RES_OL ) {
-                        // resistor is too small, cant detect voltage level with 12 bit                    
+                        // resistor is too large, even < 1.2uA generates voltages > 2048mV                    
                         uart_UartPutString("<OL>");                                    
                     } else {
-                        // resistor is too large, even < 1.2uA generates voltages > 2048mV                                
+                        // resistor is too small (or short), voltage is below V_MIN (0.8V)                                
                         uart_UartPutString("<CL>");  
                     }
                     break;
                 default:                    
                     rgb_green_Write(0x0);
-                    resistance = accumulator / samples;
-                    resistance *=  2048.0f / (4095.0f * 0.0012f);
-                    resistance -= RES_OFFSET;                    
-                    sprintf(buffer, "<%f>", resistance);
-                    uart_UartPutString(buffer);                   
+                    if( samples > 0 ) {
+                        resistance = accumulator / samples;
+                        resistance *=  2048.0f / (4096.0f * 0.0012f);
+                        resistance -= RES_OFFSET;                    
+                        sprintf(buffer, "<%f>", resistance);
+                        uart_UartPutString(buffer);                   
+                    }
                     accumulator = 0;
                     samples = 0;
             }                     
